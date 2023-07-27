@@ -2,3 +2,5 @@ E:\Test\Libraries\Libs\ServerCore\Debug\ServerCore.pdb
 E:\Test\ServerCore\x64\Debug\ServerCore.pdb
 E:\MMORPG_Server\Libraries\Libs\ServerCore\Debug\ServerCore.pdb
 E:\MMORPG_Server\ServerCore\x64\Debug\ServerCore.pdb
+E:\MMORPG_Server_Protobuf\Libraries\Libs\ServerCore\Debug\ServerCore.pdb
+E:\MMORPG_Server_Protobuf\ServerCore\x64\Debug\ServerCore.pdb
