@@ -10,20 +10,6 @@
 #include "Job.h"
 #include "Room.h"
 
-void HealByValue(int64 target, int32 value)
-{
-	cout << target << "한테 힐" << value << "만큼 줌" << endl;
-}
-
-class Knight
-{
-public:
-	void HealMe(int32 value)
-	{
-		cout << "HealMe! " << value << endl;
-	}
-};
-
 int main()
 {
 	ClientPacketHandler::Init();
@@ -46,12 +32,6 @@ int main()
 					service->GetIocpCore()->Dispatch();
 				}
 			});
-	}
-
-	while (true)
-	{
-		GRoom->FlushJob();
-		this_thread::sleep_for(1ms);
 	}
 
 	GThreadManager->Join();

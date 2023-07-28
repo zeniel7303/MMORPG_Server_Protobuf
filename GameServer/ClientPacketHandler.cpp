@@ -74,7 +74,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& _session, Protocol::C_ENTER_GAME& _pk
 
 	PlayerRef player = gameSession->m_players[index]; // 아직은 READ_ONLY
 
-	GRoom->PushJob(&Room::Enter, player);
+	GRoom->DoAsync(&Room::Enter, player);
 
 	// 추후 Jobqueue에서 해당 패킷 실행 완료 후 Send하도록 변경
 	Protocol::S_ENTER_GAME enterGamePkt;
@@ -93,7 +93,7 @@ bool Handle_C_CHAT(PacketSessionRef& _session, Protocol::C_CHAT& _pkt)
 	chatPkt.set_msg(_pkt.msg());
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(chatPkt);
 
-	GRoom->PushJob(&Room::Broadcast, sendBuffer);
+	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
 
 	return true;
 }

@@ -22,15 +22,3 @@ void Room::Broadcast(SendBufferRef _sendBuffer)
 		p.second->ownerSession->Send(_sendBuffer);
 	}
 }
-
-void Room::FlushJob()
-{
-	while (true)
-	{
-		JobRef job = m_jobQueue.Pop();
-		if (job == nullptr)
-			break;
-
-		job->Execute();
-	}
-}

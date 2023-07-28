@@ -1,6 +1,6 @@
 #pragma once
 #include <mutex>
-template<typename T>
+/*template<typename T>
 class LockQueue
 {
 private:
@@ -42,7 +42,7 @@ public:
 		m_queue.pop();
 		return true;
 	}
-};
+};*/
 
 /*
 멀티 쓰레드 미고려한 러프한 락프리큐

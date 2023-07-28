@@ -7,6 +7,7 @@
 
 using CallbackType = std::function<void()>;
 
+// Functor + Lambda
 class Job
 {
 private:
@@ -18,6 +19,7 @@ public:
 	}
 
 	template<typename T, typename Ret, typename... Args>
+	// shared_ptr로 생명 유지는 쉽지만 Cycle일어나는 것 주의(Memory leak)
 	Job(shared_ptr<T> _owner, Ret(T::* _memFunc)(Args...), Args&&... _args)
 	{
 		m_callback = [_owner, _memFunc, _args...]()
