@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "JobQueue.h"
+#include "GlobalQueue.h"
 
 /*----------------------------
 			JobQueue
@@ -14,7 +15,16 @@ void JobQueue::Push(JobRef&& _job)
 	// 첫번째 Job을 넣은 쓰레드가 실행까지 담당
 	if (prevCount == 0)
 	{
-		Execute();
+		// 이미 실행중인 JobQueue가 없으면 실행
+		if (LCurrentJobQueue == nullptr)
+		{
+			Execute();
+		}
+		else
+		{
+			// 여유 있는 다른 쓰레드가 실행하도록 GlobalQueue에 넘긴다.
+			GGlobalQueue->Push(shared_from_this());
+		}
 	}
 }
 
@@ -22,8 +32,11 @@ void JobQueue::Push(JobRef&& _job)
 // 1. 일감이 한번에 & 계속 너무 몰리는 상황
 // 2. DoAsync 함수를 계속 타서(DoAsync해서 실행한 함수 안에 또 DoAsync가 있는 등...) 
 //    절대 끝나지 않는 상황 (일감이 한 쓰레드한테 몰리는 상황)
+// -> GlobalQueue 추가로 해결
 void JobQueue::Execute()
 {
+	LCurrentJobQueue = this;
+
 	while (true)
 	{
 		Vector<JobRef> jobs;
@@ -36,6 +49,7 @@ void JobQueue::Execute()
 		// 남은 일감이 0개라면 종료
 		if (m_jobCount.fetch_sub(jobCount) == jobCount)
 		{
+			LCurrentJobQueue = nullptr;
 			return;
 		}
 	}

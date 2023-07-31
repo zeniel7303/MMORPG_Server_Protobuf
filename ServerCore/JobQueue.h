@@ -28,7 +28,8 @@ public:
 
 	void ClearJobs() { m_jobs.Clear(); }
 
+	void Execute();
+
 private:
 	void Push(JobRef&& _job);
-	void Execute();
 };
