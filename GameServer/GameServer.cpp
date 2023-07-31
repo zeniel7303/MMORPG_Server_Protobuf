@@ -19,6 +19,7 @@ void DoWorkerJob(ServerServiceRef& service)
 {
 	while (true)
 	{
+		// TODO : WORKER_TICK은 하드코딩보단 자동 보정이 되도록 수정
 		LEndTickCount = ::GetTickCount64() + WORKER_TICK;
 
 		// 네트워크 입출력 처리 -> 인게임 로직까지 (패킷 핸들러에 의해)

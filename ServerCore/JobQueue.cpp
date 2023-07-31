@@ -30,6 +30,7 @@ void JobQueue::Push(JobRef&& _job)
 
 // 해결해야할 것
 // 1. 일감이 한번에 & 계속 너무 몰리는 상황
+// -> Execute에서 시간 체크를 해 너무 과도하게 오래 붙잡고 있으면 빠져나오도록 수정
 // 2. DoAsync 함수를 계속 타서(DoAsync해서 실행한 함수 안에 또 DoAsync가 있는 등...) 
 //    절대 끝나지 않는 상황 (일감이 한 쓰레드한테 몰리는 상황)
 // -> GlobalQueue 추가로 해결
@@ -51,6 +52,15 @@ void JobQueue::Execute()
 		{
 			LCurrentJobQueue = nullptr;
 			return;
+		}
+
+		const uint64 now = ::GetTickCount64();
+		if (now >= LEndTickCount)
+		{
+			LCurrentJobQueue = nullptr;
+			// 여유 있는 다른 쓰레드가 실행하도록 GlobalQueue에 넘긴다
+			GGlobalQueue->Push(shared_from_this());
+			break;
 		}
 	}
 }
