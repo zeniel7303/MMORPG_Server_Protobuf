@@ -26,10 +26,12 @@ public:
 		Push(ObjectPool<Job>::MakeShared(owner, _memFunc, std::forward<Args>(_args)...));
 	}
 
+
 	void ClearJobs() { m_jobs.Clear(); }
 
+public:
+	// 굳이 오른값일 이유는 없어보임. 레퍼런스 카운트 증감 정도는 감수 가능
+	//void Push(JobRef&& _job);
+	void Push(JobRef _job);
 	void Execute();
-
-private:
-	void Push(JobRef&& _job);
 };

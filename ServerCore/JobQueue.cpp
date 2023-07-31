@@ -6,7 +6,7 @@
 			JobQueue
 ------------------------------*/
 
-void JobQueue::Push(JobRef&& _job)
+void JobQueue::Push(JobRef _job)
 {
 	// 순서 중요 - count 증가 후 push, job 실행 후 count 감소
 	const int32 prevCount = m_jobCount.fetch_add(1);
