@@ -4,7 +4,10 @@
 class GameSession : public PacketSession
 {
 public:
-	Vector<PlayerRef> m_players;
+	Vector<PlayerRef>		m_players;
+
+	PlayerRef				m_currentPlayer;
+	weak_ptr<class Room>	m_room;
 
 public:
 	~GameSession()

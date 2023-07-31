@@ -72,15 +72,16 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& _session, Protocol::C_ENTER_GAME& _pk
 
 	// TODO : Validation
 
-	PlayerRef player = gameSession->m_players[index]; // 아직은 READ_ONLY
+	gameSession->m_currentPlayer = gameSession->m_players[index]; // 아직은 READ_ONLY
+	gameSession->m_room = GRoom;
 
-	GRoom->DoAsync(&Room::Enter, player);
+	GRoom->DoAsync(&Room::Enter, gameSession->m_currentPlayer);
 
 	// 추후 Jobqueue에서 해당 패킷 실행 완료 후 Send하도록 변경
 	Protocol::S_ENTER_GAME enterGamePkt;
 	enterGamePkt.set_success(true);
 	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterGamePkt);
-	player->ownerSession->Send(sendBuffer);
+	gameSession->m_currentPlayer->ownerSession->Send(sendBuffer);
 
 	return true;
 }
