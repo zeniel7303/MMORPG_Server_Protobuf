@@ -6,7 +6,7 @@
 			JobQueue
 ------------------------------*/
 
-void JobQueue::Push(JobRef _job)
+void JobQueue::Push(JobRef _job, bool _pushOnly)
 {
 	// 순서 중요 - count 증가 후 push, job 실행 후 count 감소
 	const int32 prevCount = m_jobCount.fetch_add(1);
@@ -15,8 +15,8 @@ void JobQueue::Push(JobRef _job)
 	// 첫번째 Job을 넣은 쓰레드가 실행까지 담당
 	if (prevCount == 0)
 	{
-		// 이미 실행중인 JobQueue가 없으면 실행
-		if (LCurrentJobQueue == nullptr)
+		// 이미 실행중인 JobQueue가 없으면 && _pushOnlty가 false면 실행
+		if (LCurrentJobQueue == nullptr && !_pushOnly)
 		{
 			Execute();
 		}
