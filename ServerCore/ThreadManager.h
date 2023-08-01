@@ -24,5 +24,6 @@ public:
 	static void DestroyTLS();
 
 	static void DoGlobalQueueWork();
+	static void DistributeReservedJobs();
 };
 

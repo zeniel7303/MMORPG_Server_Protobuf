@@ -6,9 +6,9 @@
 			JobTimer
 ------------------------------*/
 
-void JobTimer::Reserve(uint64 _tickAfter, weak_ptr<JobQueue> _owner, JobRef _job)
+void JobTimer::Reserve(uint64 _tick, weak_ptr<JobQueue> _owner, JobRef _job)
 {
-	const uint64 executeTick = ::GetTickCount64() + _tickAfter;
+	const uint64 executeTick = ::GetTickCount64() + _tick;
 	// STOMP 미사용시(Release)엔 이미 내부적으로 Lock이 걸려있다.
 	JobData* jobData = ObjectPool<JobData>::Pop(_owner, _job);
 
@@ -20,6 +20,8 @@ void JobTimer::Reserve(uint64 _tickAfter, weak_ptr<JobQueue> _owner, JobRef _job
 void JobTimer::Distribute(uint64 _now)
 {
 	// 한 번에 1 쓰레드만 통과
+	// -> 운나쁘게 쓰레드가 여러개 진입해 일처리를 동시에 하게되면
+	// 일감의 순서가 꼬일 수도 있다.(재현이 거의 되지 않음)
 	if (m_distributing.exchange(true) == true)
 		// 이전 값이 true면 누군가 이미 이 함수를 실행 중이니 return
 		return;

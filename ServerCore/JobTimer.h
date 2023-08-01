@@ -40,7 +40,7 @@ private:
 	Atomic<bool>				m_distributing = false;
 
 public:
-	void			Reserve(uint64 _tickAfter, weak_ptr<JobQueue> _owner, JobRef _job);
+	void			Reserve(uint64 _tick, weak_ptr<JobQueue> _owner, JobRef _job);
 	void			Distribute(uint64 _now);
 	void			Clear();
 };
