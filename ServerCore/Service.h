@@ -4,6 +4,11 @@
 #include "Listener.h"
 #include <functional>
 
+/*
+
+*/
+
+// 역할 구분
 enum class ServiceType : uint8
 {
 	Server,
@@ -21,13 +26,13 @@ class Service : public enable_shared_from_this<Service>
 protected:
 	USE_LOCK;
 	ServiceType			m_type;
-	NetAddress			m_netAddress = {};
+	NetAddress			m_netAddress = {};		// Server : 자기 자신의 address / Client : 상대방 쪽(붙어야할 대상의) address
 	IocpCoreRef			m_iocpCore;
 
 	Set<SessionRef>		m_sessions;
 	int32				m_sessionCount = 0;
 	int32				m_maxSessionCount = 0;
-	SessionFactory		m_sessionFactory;
+	SessionFactory		m_sessionFactory;		// 세션 생성 함수
 
 public:
 	Service(ServiceType _type, NetAddress _address, IocpCoreRef _core, SessionFactory _factory, int32 _maxSessionCount = 1);

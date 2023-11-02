@@ -11,10 +11,12 @@ LPFN_ACCEPTEX		SocketUtils::AcceptEx = nullptr;
 
 void SocketUtils::Init()
 {
+	// Winsock 초기화
 	WSADATA wsaData;
 	ASSERT_CRASH(::WSAStartup(MAKEWORD(2, 2), OUT & wsaData) == 0);
 
 	// 런타임에 주소 얻어오는 API
+	// https://learn.microsoft.com/ko-kr/windows/win32/api/mswsock/nf-mswsock-acceptex
 	SOCKET dummySocket = CreateSocket();
 	ASSERT_CRASH(BindWindowsFunction(dummySocket,
 		WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx)));
@@ -33,17 +35,22 @@ void SocketUtils::Clear()
 bool SocketUtils::BindWindowsFunction(SOCKET _socket, GUID _guid, LPVOID* _fn)
 {
 	DWORD bytes = 0;
+	// https://learn.microsoft.com/ko-kr/windows/win32/api/winsock2/nf-winsock2-wsaioctl
+	//								DummySocket
 	return SOCKET_ERROR != ::WSAIoctl(_socket, SIO_GET_EXTENSION_FUNCTION_POINTER, &_guid, sizeof(_guid),
-		_fn, sizeof(*_fn), OUT & bytes, NULL, NULL);
+		_fn, sizeof(*_fn), OUT &bytes, NULL, NULL);
 }
 
 SOCKET SocketUtils::CreateSocket()
 {
+	// ::socket()와는 다르게 아래의 함수가 세분화해 옵션을 설정 가능해 좋다.
 	return ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 }
 
 bool SocketUtils::SetLinger(SOCKET _socket, uint16 _onoff, uint16 _linger)
 {
+	// Linger란
+	// https://velog.io/@jyongk/TCP-%EC%86%8C%EC%BC%93-%EC%98%B5%EC%85%98-SOLINGER
 	LINGER option;
 	option.l_onoff = _onoff;
 	option.l_linger = _linger;

@@ -82,6 +82,10 @@ bool ClientService::Start()
 	return true;
 }
 
+/*-----------------
+	ServerService
+------------------*/
+
 ServerService::ServerService(NetAddress _address, IocpCoreRef _core, SessionFactory _factory, int32 _maxSessionCount)
 	: Service(ServiceType::Server, _address, _core, _factory, _maxSessionCount)
 {

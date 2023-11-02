@@ -19,7 +19,9 @@ NetAddress::NetAddress(wstring _ip, uint16 _port)
 
 wstring NetAddress::GetIpAddress()
 {
+	// 사이즈 200이다(중요)
 	WCHAR buffer[100];
+	// sizeof(buffer) / sizeof(WCHAR)을 매번 쓰기 위험해 매크로(len32)로 바꿈
 	::InetNtopW(AF_INET, &m_sockAddr.sin_addr, buffer, len32(buffer));
 	return wstring(buffer);
 }

@@ -46,12 +46,23 @@ bool Listener::StartAccept(ServerServiceRef _service)
 	if (SocketUtils::Listen(m_socket) == false)
 		return false;
 
+	// 1개만 할 경우 많은 동접이 있을 때 몇몇은 접속이 안될 가능성이 있으므로 여러개 만든다.
 	const int32 acceptCount = m_service->GetMaxSessionCount();
 	for (int32 i = 0; i < acceptCount; i++)
 	{
 		AcceptEvent* acceptEvent = xnew<AcceptEvent>();
+
+		/*이러면 큰일난다.
+		이유 : shared_ptr을 처음부터 만들어주고 그 포인터를 this 포인터를 넘겨줬기때문에 실질적으로 RefCount가 1인 shared_ptr을 새로 생성한 셈이 된다.
+		그러면 외부에서 이 리스너를 또 다른 shared_ptr로 관리하게된다면 동일한 포인터를 2개의 shared_ptr로 관리하게 되는 것이고,
+		혹시라도 아래의 코드가 RefCount가 0이 되어버리면 절대 지우면 안되는 것을 지워버리게될 수 있다.
+		-> enable_shared_from_this로 해결
+		RawPointer로 shared_ptr을 만드는건 언제나 지양하자.
+		acceptEvent->m_owner = shared_ptr<IocpObject>(this);*/
+
 		// IocpObject의 public enable_shared_from_this 참고
-		acceptEvent->m_owner = shared_from_this();
+		// shared_from_this를 사용했다면 사용한 곳은 shared_ptr로 활용해야한다. -> Listener도 shared_ptr로 관리
+		acceptEvent->m_owner = shared_from_this();	// 자기 자신에 대한 RefCount를 유지한 채로 Shared_ptr 생성
 		m_acceptEvents.push_back(acceptEvent);
 		RegisterAccept(acceptEvent);
 	}

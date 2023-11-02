@@ -26,6 +26,7 @@ public:
 		GGlobalQueue = new GlobalQueue();
 		GJobTimer = new JobTimer();
 		GDeadLockProfiler = new DeadLockProfiler();
+
 		SocketUtils::Init();
 	}
 
@@ -37,6 +38,7 @@ public:
 		delete GGlobalQueue;
 		delete GJobTimer;
 		delete GDeadLockProfiler;
+
 		SocketUtils::Clear();
 	}
 } GCoreGlobal;
