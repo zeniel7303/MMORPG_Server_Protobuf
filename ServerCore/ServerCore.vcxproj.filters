@@ -19,6 +19,9 @@
     <Filter Include="Job">
       <UniqueIdentifier>{8b94d2b1-e1ee-493c-956e-df847a2e11fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Memory\NotUsing">
+      <UniqueIdentifier>{ea6dfa6d-5ff7-4066-9ea4-39e514b664a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -48,9 +51,6 @@
     <ClInclude Include="DeadLockProfiler.h">
       <Filter>Thread</Filter>
     </ClInclude>
-    <ClInclude Include="RefCounting.h">
-      <Filter>Memory</Filter>
-    </ClInclude>
     <ClInclude Include="Allocator.h">
       <Filter>Memory</Filter>
     </ClInclude>
@@ -58,9 +58,6 @@
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="Container.h">
-      <Filter>Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPool.h">
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="ObjectPool.h">
@@ -117,6 +114,12 @@
     <ClInclude Include="JobTimer.h">
       <Filter>Job</Filter>
     </ClInclude>
+    <ClInclude Include="RefCounting.h">
+      <Filter>Memory\NotUsing</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPool.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -140,16 +143,10 @@
     <ClCompile Include="DeadLockProfiler.cpp">
       <Filter>Thread</Filter>
     </ClCompile>
-    <ClCompile Include="RefCounting.cpp">
-      <Filter>Memory</Filter>
-    </ClCompile>
     <ClCompile Include="Allocator.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="Memory.cpp">
-      <Filter>Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryPool.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="NetAddress.cpp">
@@ -199,6 +196,12 @@
     </ClCompile>
     <ClCompile Include="JobTimer.cpp">
       <Filter>Job</Filter>
+    </ClCompile>
+    <ClCompile Include="RefCounting.cpp">
+      <Filter>Memory\NotUsing</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryPool.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,6 +15,7 @@ class Listener : public IocpObject
 protected:
 	SOCKET					m_socket = INVALID_SOCKET;
 	Vector<AcceptEvent*>	m_acceptEvents;
+	// shared_ptr이므로 순환 문제 조심
 	ServerServiceRef		m_service;
 
 public:
