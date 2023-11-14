@@ -30,6 +30,7 @@ void Session::Send(SendBufferRef _sendBuffer)
 
 		m_sendQueue.push(_sendBuffer);
 
+		// true를 넣기 이전의 값이 false였다면
 		if (m_sendRegistered.exchange(true) == false)
 			registerSend = true;
 	}
@@ -174,11 +175,16 @@ void Session::RegisterSend()
 
 			writeSize += sendBuffer->WriteSize();
 			// TODO : 예외 체크
+			// writeSize 체크해 너무 많은 데이터를 한번에 보내지 않도록 조절해야한다.
+			// but, 기준 애매해 보류
 
 			m_sendQueue.pop();
 			m_sendEvent.m_sendBuffers.push_back(sendBuffer);
 		}
 	}
+
+	// 이곳부턴 멀티쓰레드 고려하지 않아도된다.
+	// RegisterSend는 한번에 한곳에서만 호출하므로(Send 함수 참고)
 
 	// Scatter-Gather (흩어져 있는 데이터들을 모아서 한 방에 보낸다)
 	Vector<WSABUF> wsaBufs;
@@ -192,7 +198,8 @@ void Session::RegisterSend()
 	}
 
 	DWORD numOfBytes = 0;
-	if (SOCKET_ERROR == ::WSASend(m_socket, wsaBufs.data(), static_cast<DWORD>(wsaBufs.size()), OUT &numOfBytes, 0, &m_sendEvent, nullptr))
+	if (SOCKET_ERROR == ::WSASend(m_socket, wsaBufs.data(), 
+		static_cast<DWORD>(wsaBufs.size()), OUT &numOfBytes, 0, &m_sendEvent, nullptr))
 	{
 		int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
@@ -246,7 +253,8 @@ void Session::ProcessRecv(int32 _numOfBytes)
 	}
 
 	int32 dataSize = m_recvBuffer.DataSize();
-	int32 processLen = OnRecv(m_recvBuffer.ReadPos(), dataSize); // 컨텐츠 코드에서 재정의
+	// 처리한 데이터 길이
+	int32 processLen = OnRecv(m_recvBuffer.ReadPos(), dataSize); // -> PacketSession::OnRecv
 	if (processLen < 0 || dataSize < processLen || m_recvBuffer.OnRead(processLen) == false)
 	{
 		Disconnect(L"OnRead Overflow");
@@ -274,11 +282,14 @@ void Session::ProcessSend(int32 _numOfBytes)
 	// 컨텐츠 코드에서 재정의
 	OnSend(_numOfBytes);
 
-	WRITE_LOCK;
-	if (m_sendQueue.empty())
-		m_sendRegistered.store(false);
-	else
-		RegisterSend();
+	{
+		WRITE_LOCK;
+
+		if (m_sendQueue.empty())
+			m_sendRegistered.store(false);
+		else
+			RegisterSend();
+	}
 }
 
 void Session::HandleError(int32 _errorCode)
@@ -325,6 +336,7 @@ int32 PacketSession::OnRecv(BYTE* _buffer, int32 _len)
 		if (dataSize < header.size)
 			break;
 
+		// 컨텐츠 코드에서 재정의
 		// 패킷 조립 성공
 		OnRecvPacket(&_buffer[processLen], header.size);
 

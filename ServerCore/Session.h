@@ -109,9 +109,9 @@ public:
 	PacketSession();
 	virtual ~PacketSession();
 
-	PacketSessionRef	GetPacketSessionRef() { return static_pointer_cast<PacketSession>(shared_from_this()); }
+	PacketSessionRef		GetPacketSessionRef() { return static_pointer_cast<PacketSession>(shared_from_this()); }
 
 protected:
-	virtual int32		OnRecv(BYTE* _buffer, int32 _len) sealed;
-	virtual void		OnRecvPacket(BYTE* _buffer, int32 _len) abstract;
+	virtual int32			OnRecv(BYTE* _buffer, int32 _len) sealed;
+	virtual void			OnRecvPacket(BYTE* _buffer, int32 _len) abstract;
 };

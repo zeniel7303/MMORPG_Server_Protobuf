@@ -40,9 +40,12 @@ USING_SHARED_PTR(JobQueue);
 #define len16(arr)	static_cast<int16>(sizeof(arr)/sizeof(arr[0]))
 #define len32(arr)	static_cast<int32>(sizeof(arr)/sizeof(arr[0]))
 
-
-// 디버깅용
-//	- 메모리 오염 체크
-//	- 개발 단계에서 버그 찾기
-// ObjectPool 미사용 처리
-#define _STOMP
+#ifdef _DEBUG
+	// 디버깅용
+	//	- 메모리 오염 체크
+	//	- 개발 단계에서 버그 찾기
+	// ObjectPool 미사용 처리
+	#define _STOMP
+#else
+	
+#endif

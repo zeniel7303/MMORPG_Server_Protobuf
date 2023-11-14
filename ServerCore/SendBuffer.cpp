@@ -48,6 +48,7 @@ SendBufferRef SendBufferChunk::Open(uint32 _allocSize)
 		return nullptr;
 
 	m_open = true;
+	//												내 자신			버퍼			
 	return ObjectPool<SendBuffer>::MakeShared(shared_from_this(), Buffer(), _allocSize);
 }
 
@@ -74,7 +75,8 @@ SendBufferRef SendBufferManager::Open(uint32 _size)
 
 	ASSERT_CRASH(LSendBufferChunk->IsOpen() == false);
 
-	// 다 썼으면 버리고 새거로 교체
+	// 여유공간을 체크해 다 썼으면 버리고 새거로 교체
+	// (버려진 LSendBufferChunk는 RefCount가 0이 되어 PushGlobal을 호출한다.)
 	if (LSendBufferChunk->FreeSize() < _size)
 	{
 		LSendBufferChunk = Pop(); // WRITE_LOCK
@@ -100,6 +102,9 @@ SendBufferChunkRef SendBufferManager::Pop()
 		}
 	}
 
+	// 여유분이 없으므로 새로 생성
+	// 무한이 재사용할 것이므로 deleter 자리에 delete로 메모리를 날리는게 아닌 PushGlobal을 넣는다.
+	// PushGlobal은 맴버함수로 전달할 수 없으므로 static 함수로 구현
 	return SendBufferChunkRef(xnew<SendBufferChunk>(), PushGlobal);
 }
 
@@ -111,7 +116,9 @@ void SendBufferManager::Push(SendBufferChunkRef _buffer)
 
 void SendBufferManager::PushGlobal(SendBufferChunk* _buffer)
 {
+#ifdef _DEBUG
 	cout << "PushGlobal SENDBUFFERCHUNK" << endl;
+#endif
 
 	GSendBufferManager->Push(SendBufferChunkRef(_buffer, PushGlobal));
 }
