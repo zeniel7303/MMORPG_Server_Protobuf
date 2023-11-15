@@ -17,19 +17,21 @@
 			Memory
 ------------------------------*/
 
-/*
 #ifdef _DEBUG
-#define Xalloc(size)	PoolAllocator::Alloc(size)
-#define Xrelease(ptr)	PoolAllocator::Release(ptr)
-//#define Xalloc(size)	StompAllocator::Alloc(size)
-//#define Xrelease(ptr) StompAllocator::Release(ptr)
 //#define Xalloc(size)	BaseAllocator::Alloc(size)
 //#define Xrelease(ptr) BaseAllocator::Release(ptr)
+//#define Xalloc(size)	StompAllocator::Alloc(size)
+//#define Xrelease(ptr)	StompAllocator::Release(ptr)
+#define Xalloc(size)	PoolAllocator::Alloc(size)
+#define Xrelease(ptr)	PoolAllocator::Release(ptr)
 #else
-#define Xalloc(size)	BaseAllocator::Alloc(size)
-#define Xrelease(ptr)	BaseAllocator::Release(ptr)
+//#define Xalloc(size)	BaseAllocator::Alloc(size)
+//#define Xrelease(ptr) BaseAllocator::Release(ptr)
+//#define Xalloc(size)	StompAllocator::Alloc(size)
+//#define Xrelease(ptr) StompAllocator::Release(ptr)
+#define Xalloc(size)	PoolAllocator::Alloc(size)
+#define Xrelease(ptr)	PoolAllocator::Release(ptr)
 #endif
-*/
 
 /*----------------------------
 			Crash

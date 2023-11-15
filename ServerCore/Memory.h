@@ -33,14 +33,20 @@ public:
 	void	Release(void* _ptr);
 };
 
+// 원하는 방식으로 할당하는 것이 목표
+// - 메모리 할당 방식(풀링 등) 및 메모리 해제 여부 추적
+#pragma region custom new, delete
+
+//						생성자에 들어갈 인자값(들) - Variadic template
 template <typename Type, typename... Args>
 Type* xnew(Args&&... _args)
 {
 	//Type* memory = static_cast<Type*>(BaseAllocator::Alloc(sizeof(Type)));
-	Type* memory = static_cast<Type*>(PoolAllocator::Alloc(sizeof(Type)));
+	//Type* memory = static_cast<Type*>(PoolAllocator::Alloc(sizeof(Type)));
+	Type* memory = static_cast<Type*>(Xalloc(Type));
 
-	// placement new
-	// 메모리 위에다가 생성자만 호출
+	// placement new 문법
+	// 메모리 위에다가 생성자 호출
 	new(memory)Type(std::forward<Args>(_args)...);
 
 	return memory;
@@ -49,11 +55,15 @@ Type* xnew(Args&&... _args)
 template <typename Type>
 void xdelete(Type* _obj)
 {
+	// 소멸자 호출
 	_obj->~Type();
 
 	//BaseAllocator::Release(_obj);
 	PoolAllocator::Release(_obj);
+	Xrelease(_obj);
 }
+
+#pragma endregion custom new, delete
 
 template <typename Type, typename... Args>
 shared_ptr<Type> MakeShared(Args&&... _args)
