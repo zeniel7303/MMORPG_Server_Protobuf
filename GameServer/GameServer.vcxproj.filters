@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Main">
-      <UniqueIdentifier>{e8dccf15-3bdd-4854-8dd2-f0ba5d770abc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{37e6aaa6-0769-426b-aa67-d42e60cd791c}</UniqueIdentifier>
     </Filter>
@@ -16,10 +13,13 @@
     <Filter Include="GameContents">
       <UniqueIdentifier>{bcd2e181-e52a-4d30-96ed-24f4b1e67349}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameContents\Main">
+      <UniqueIdentifier>{e8dccf15-3bdd-4854-8dd2-f0ba5d770abc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameServer.cpp">
-      <Filter>Main</Filter>
+      <Filter>GameContents\Main</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Utils</Filter>
@@ -31,10 +31,10 @@
       <Filter>Utils\LockFree%28Study%29</Filter>
     </ClCompile>
     <ClCompile Include="GameSession.cpp">
-      <Filter>Main</Filter>
+      <Filter>GameContents\Main</Filter>
     </ClCompile>
     <ClCompile Include="GameSessionManager.cpp">
-      <Filter>Main</Filter>
+      <Filter>GameContents\Main</Filter>
     </ClCompile>
     <ClCompile Include="Protocol.pb.cc">
       <Filter>Protocol</Filter>
@@ -46,12 +46,15 @@
       <Filter>Protocol</Filter>
     </ClCompile>
     <ClCompile Include="ClientPacketHandler.cpp">
-      <Filter>Main</Filter>
+      <Filter>GameContents\Main</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
+      <Filter>GameContents</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomManager.cpp">
       <Filter>GameContents</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,10 +69,10 @@
       <Filter>Utils\LockFree%28Study%29</Filter>
     </ClInclude>
     <ClInclude Include="GameSession.h">
-      <Filter>Main</Filter>
+      <Filter>GameContents\Main</Filter>
     </ClInclude>
     <ClInclude Include="GameSessionManager.h">
-      <Filter>Main</Filter>
+      <Filter>GameContents\Main</Filter>
     </ClInclude>
     <ClInclude Include="Protocol.pb.h">
       <Filter>Protocol</Filter>
@@ -81,12 +84,15 @@
       <Filter>Protocol</Filter>
     </ClInclude>
     <ClInclude Include="ClientPacketHandler.h">
-      <Filter>Main</Filter>
+      <Filter>GameContents\Main</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>GameContents</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
+      <Filter>GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomManager.h">
       <Filter>GameContents</Filter>
     </ClInclude>
   </ItemGroup>

@@ -38,9 +38,8 @@ SListEntry* PopEntrySList(SListHeader* _header)
 void PushEntrySList(SListHeader* _header, SListEntry* _entry)
 {
 	_entry->next = _header->next;
-															     // desired, expected
-	while (::InterlockedCompareExchange64(
-		(int64*)&_header->next, (int64)_entry, (int64)_entry->next) == 0)
+															         // desired, expected
+	while (::InterlockedCompareExchange64((int64*)&_header->next, (int64)_entry, (int64)_entry->next) == 0)
 	{
 
 	}
@@ -76,7 +75,7 @@ void PushEntrySList(SListHeader* _header, SListEntry* _entry)
 	SListHeader desired = {};
 
 	// 16바이트 정렬
-	// 60비트(next 크기)로 주소를 표현
+	// 60비트(next 크기)로 주소를 표현(굳이 60으로 한 이유는 모작이기 때문)
 	desired.HeaderX64.next = (((uint64)_entry) >> 4);
 
 	while (true)
@@ -112,10 +111,12 @@ SListEntry* PopEntrySList(SListHeader* _header)
 		entry = (SListEntry*)(((uint64)expected.HeaderX64.next) << 4);
 		if (entry == nullptr) break;
 
-		// 이곳도 Use_After_Free 문제 있을 수 있다.
+		// 이곳에서 Use_After_Free 문제 있을 수 있다. 
+		// (다른 쓰레드가 pop을 하여 참조 주소를 날려버린 경우 크래시 또는 메모리 오염문제가 발생한다.)
 		// 64비트 주소를 60비트에 낑겨넣기 위해 4를 땡긴다.
 		desired.HeaderX64.next = ((uint64)entry->next) >> 4;
 
+		// 해당 값들 덕분에 ABA 문제는 해결
 		desired.HeaderX64.depth = expected.HeaderX64.depth - 1;
 		desired.HeaderX64.sequence = expected.HeaderX64.sequence + 1;
 

@@ -382,6 +382,7 @@ SListEntry* PopEntrySList(SListHeader* _header);*/
 		   2차 시도
 ------------------------------*/
 
+// 멀티쓰레드 환경에서 돌아가도록.
 /*struct SListEntry
 {
 	SListEntry* next;
@@ -401,11 +402,11 @@ SListEntry* PopEntrySList(SListHeader* _header);*/
 ------------------------------*/
 
 // MS에서 만든것을 유사하게 제작
-// MS에서 만든것을 사용할 것이다.(사용하지 않을 것)
+// MS에서 만든것을 사용할 것이다.(해당 모작해서 구현한 부분은 사용하지 않을 것)
 // LockFree는 직접 구현하기엔 너무 위험하다.
 
 // 무조건 메모리가 16바이트 정렬이 되게끔 컴파일러에게 요청
-// 16바이트 정렬로 하게되면 뒤는 하위 4비트는 0000이 된다.
+// 16바이트 정렬로 하게되면 뒤는 무조건 하위 4비트는 0000이 된다.
 
 /*DECLSPEC_ALIGN(16)
 struct SListEntry

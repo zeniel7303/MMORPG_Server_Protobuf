@@ -9,6 +9,8 @@ enum
 		 MemoryHeader
 ------------------------------*/
 
+// 디버깅을 돕는 용도
+
 DECLSPEC_ALIGN(SLIST_ALIGNMENT)
 struct MemoryHeader : public SLIST_ENTRY
 {
@@ -30,7 +32,7 @@ struct MemoryHeader : public SLIST_ENTRY
 
 	int32 allocSize;
 
-	// TODO
+	// TODO - 필요한 추가 정보
 };
 
 /*----------------------------
@@ -52,6 +54,8 @@ private:
 	atomic<int32>	m_useCount = 0;
 	atomic<int32>	m_reservedCount = 0;
 
+	// 락을 거는 것과 임시로 저장해두는 queue가 있는 것은 썩 좋지 못한 방법.
+	// 메모리 할당은 굉장히 자주 일어나는 행위이기때문
 	/*USE_LOCK;
 	queue<MemoryHeader*> m_queue;*/
 
@@ -62,4 +66,3 @@ public:
 	void			Push(MemoryHeader* _ptr);
 	MemoryHeader*	Pop();
 };
-

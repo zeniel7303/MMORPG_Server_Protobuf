@@ -74,7 +74,6 @@ void* Memory::Allocate(int32 _size)
 		header = m_poolTable[allocSize]->Pop();
 	}
 #endif
-	
 
 	return MemoryHeader::AttachHeader(header, allocSize);
 }

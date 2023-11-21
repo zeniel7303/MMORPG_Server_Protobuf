@@ -3,6 +3,8 @@
 #include "Service.h"
 #include "GameSession.h"
 #include "GameSessionManager.h"
+#include "Room.h"
+#include "RoomManager.h"
 #include "BufferWriter.h"
 #include "ClientPacketHandler.h"
 #include <tchar.h>
@@ -35,9 +37,11 @@ void DoWorkerJob(ServerServiceRef& service)
 
 int main()
 {
-	GRoom->DoTimer(1000, [] { cout << "Hello 1000" << endl; });
-	GRoom->DoTimer(2000, [] { cout << "Hello 2000" << endl; });
-	GRoom->DoTimer(3000, [] { cout << "Hello 3000" << endl; });
+	RoomRef roomRef = MakeShared<Room>();
+	RoomManager::getSingleton()->Add(roomRef);
+	roomRef->DoTimer(1000, [] { cout << "Hello 1000" << endl; });
+	roomRef->DoTimer(2000, [] { cout << "Hello 2000" << endl; });
+	roomRef->DoTimer(3000, [] { cout << "Hello 3000" << endl; });
 
 	ClientPacketHandler::Init();
 

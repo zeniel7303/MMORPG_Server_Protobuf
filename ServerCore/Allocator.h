@@ -74,4 +74,10 @@ public:
 		//Xrelease(_ptr);
 		PoolAllocator::Release(_ptr);
 	}
+
+	template<typename U>
+	bool operator==(const StlAllocator<U>&) { return true; }
+
+	template<typename U>
+	bool operator!=(const StlAllocator<U>&) { return false; }
 };

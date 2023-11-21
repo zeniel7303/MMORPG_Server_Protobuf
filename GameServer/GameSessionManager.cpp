@@ -2,8 +2,6 @@
 #include "GameSessionManager.h"
 #include "GameSession.h"
 
-GameSessionManager GSessionManager;
-
 void GameSessionManager::Add(GameSessionRef _session)
 {
 	WRITE_LOCK;

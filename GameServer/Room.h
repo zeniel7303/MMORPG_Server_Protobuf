@@ -13,5 +13,3 @@ public:
 	void Leave(PlayerRef _player);
 	void Broadcast(SendBufferRef _sendBuffer);
 };
-
-extern shared_ptr<Room> GRoom;

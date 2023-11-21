@@ -7,6 +7,7 @@ class MemoryPool;
 			Memory
 ------------------------------*/
 
+// MemoryPool을 총괄하는 매니저
 class Memory
 {
 	enum
@@ -22,7 +23,7 @@ private:
 	vector<MemoryPool*> m_pools;
 
 	// 메모리 크기 <-> 메모리 풀
-	// O(1) 빠르게 찾기 위한 테이블
+	// O(1) 빠르게 찾기 위한 헬퍼 테이블
 	MemoryPool* m_poolTable[MAX_ALLOC_SIZE + 1];
 
 public:
@@ -41,9 +42,7 @@ public:
 template <typename Type, typename... Args>
 Type* xnew(Args&&... _args)
 {
-	//Type* memory = static_cast<Type*>(BaseAllocator::Alloc(sizeof(Type)));
-	//Type* memory = static_cast<Type*>(PoolAllocator::Alloc(sizeof(Type)));
-	Type* memory = static_cast<Type*>(Xalloc(Type));
+	Type* memory = static_cast<Type*>(PoolAllocator::Alloc(sizeof(Type)));
 
 	// placement new 문법
 	// 메모리 위에다가 생성자 호출
@@ -57,10 +56,7 @@ void xdelete(Type* _obj)
 {
 	// 소멸자 호출
 	_obj->~Type();
-
-	//BaseAllocator::Release(_obj);
 	PoolAllocator::Release(_obj);
-	Xrelease(_obj);
 }
 
 #pragma endregion custom new, delete

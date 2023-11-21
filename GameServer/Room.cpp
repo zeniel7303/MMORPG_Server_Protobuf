@@ -3,8 +3,6 @@
 #include "Player.h"
 #include "GameSession.h"
 
-shared_ptr<Room> GRoom = make_shared<Room>();
-
 void Room::Enter(PlayerRef _player)
 {
 	m_players[_player->playerId] = _player;

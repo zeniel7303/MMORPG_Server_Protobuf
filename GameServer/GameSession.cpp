@@ -6,12 +6,12 @@
 
 void GameSession::OnConnected()
 {
-	GSessionManager.Add(static_pointer_cast<GameSession>(shared_from_this()));
+	GameSessionManager::getSingleton()->Add(static_pointer_cast<GameSession>(shared_from_this()));
 }
 
 void GameSession::OnDisconnected()
 {
-	GSessionManager.Remove(static_pointer_cast<GameSession>(shared_from_this()));
+	GameSessionManager::getSingleton()->Remove(static_pointer_cast<GameSession>(shared_from_this()));
 
 	if (m_currentPlayer)
 	{

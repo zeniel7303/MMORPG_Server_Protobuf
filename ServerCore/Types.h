@@ -45,7 +45,7 @@ USING_SHARED_PTR(JobQueue);
 	//	- 메모리 오염 체크
 	//	- 개발 단계에서 버그 찾기
 	// ObjectPool 미사용 처리
-	#define _STOMP
+	//#define _STOMP
 #else
 	
 #endif
