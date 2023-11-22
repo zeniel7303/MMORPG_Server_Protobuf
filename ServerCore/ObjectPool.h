@@ -16,7 +16,7 @@ public:
 #ifdef _STOMP
 		MemoryHeader* ptr = reinterpret_cast<MemoryHeader*>(
 			StompAllocator::Alloc(s_allocSize));
-		// 이 MemoryHeader는 Stomp로 할 시에 필요는 없지만 일관성을 위해 유지
+		// 이 MemoryHeader는 Stomp로 할 시에 딱히 필요는 없지만 코드의 일관성을 위해 유지
 		Type* memory = static_cast<Type*>(
 			MemoryHeader::AttachHeader(ptr, s_allocSize));
 #else
